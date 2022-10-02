@@ -1,0 +1,44 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    background-color: tan;
+  }
+
+header h1 {
+    font-size: 100px;
+    color: black;
+    display: inline-flex;
+    margin-top: 20px;
+    margin-left: 41%;
+}
+
+.highscore {
+    display: inline-flex;
+    font-size: 20px;
+    padding: 20px;
+    margin: 30px;
+    float: right;
+}
+
+.start {
+    display: flex;
+    font-size: 30px;
+    background-color: darkblue;
+    color: white;
+    padding: 40px;
+    margin: 20px auto;
+}
+
+#instructions {
+    display: block;
+    font-size: 25px;
+    width: 50%;
+    margin: 20px auto;
+    background-color: rgb(253, 236, 224);
+}
