@@ -13,26 +13,19 @@ var startBtn = document.querySelector(".start");
 var timer = document.querySelector(".time");
 var questions = document.querySelector(".questions");
 var instructions = document.querySelector("#instructions");
-var timeLeft = 0;
+var timeLeft = 300000;
 
-startBtn.addEventListener("click", test);
+startBtn.addEventListener("click", quizTimer);
 
-function test()
-{
-    timer.innerHTML = "5 minutes left";
-}
-    
-function setTime(){
-    var timerInterval = setInterval(function() {
-        secondsLeft--;
-        timer.textContent = secondsLeft + " seconds left.";
-    
-        if (timeLeft === 0) 
-        {
+function quizTimer() {
+    var timerInterval = setInterval(function(event) {
+        timeLeft = timeLeft - 1000;
+        var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        document.getElementsByClassName("time")[0].innerHTML = minutes + "m " + seconds + "s ";
+        if (timeLeft < 0) {
             clearInterval(timerInterval);
-
+            document.getElementsByClassName("time")[0].innerHTML = "Time's Up";
         }
-}, 6000);
-    return timerInterval;
+    },1000 );
 }
-
