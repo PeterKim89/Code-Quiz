@@ -8,7 +8,24 @@
     <title>Code Quiz</title>
 </head>
 <body>
-    
+    <header>
+        <!-- start button -->
+        <button class="start">Start Quiz</button>
+        <!-- timer -->
+        <h1 class="time" style="text-align:center;"></h1>
+        <!-- highscore button -->
+        <button class="highscore">Highscores</button>
+    </header>
+    <main>
+        <section id="instructions">
+            <p>Once the start button is pressed, a timer of 5 minutes will begin counting down and you will need to solve 10 questions.</p>
+            <p>For every wrong answer, 30 seconds will be deducted from the timer.</p>
+            <p>If all questions are answered or the timer runs out, the quiz will end.</p>
+            <p>Once the quiz ends, you can submit your score and view them in the highscore page. Good luck!</p>
+        </section>
+        <!-- list of questions --> 
+        <ul class="questions"></ul>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
