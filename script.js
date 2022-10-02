@@ -14,6 +14,7 @@ var timer = document.querySelector(".time");
 var questions = document.querySelector(".questions");
 var instructions = document.querySelector("#instructions");
 var timeLeft = 300000; // defaults quiz time to 5 minutes
+var toggleStatus = "visible";
 var quizQuestionAnswerList = {
     quizQuestionList: [this.Q1,this.Q2,this.Q3,this.Q4,this.Q5,this.Q6,this.Q7,this.Q8,this.Q9,this.Q10],
     Q1: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
@@ -48,9 +49,18 @@ function quizTimer() {
 // function to hide the start quiz button and the instructions
 function toggleDisplay() {
     var toggleArray = document.getElementsByClassName("toggle");
-    console.log(toggleArray);
-    for(i=0; i<toggleArray.length; i++)
-    {
-        toggleArray[i].style.display = "none";
+    if (toggleStatus === "visible") {
+        for(i=0; i<toggleArray.length; i++)
+        {
+            toggleArray[i].style.display = "none";
+        }
+        toggleStatus = "hidden";
+    }
+    else {
+        toggleStatus = "visible"
+        for(i=0; i<toggleArray.length; i++)
+        {
+            toggleArray[i].style.display = "block";
+        }        
     }
 }
