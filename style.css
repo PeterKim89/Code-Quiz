@@ -10,6 +10,9 @@ body {
     background-color: tan;
   }
   
+.toggle {
+    display: initial;
+}
 
 header h1 {
     font-size: 100px;
