@@ -27,6 +27,15 @@ header h1 {
     float: right;
 }
 
+main * {
+    text-align: center;
+}
+
+#time {
+    background-color: red;
+
+}
+
 #start {
     display: flex;
     font-size: 30px;
@@ -42,4 +51,31 @@ header h1 {
     width: 50%;
     margin: 20px auto;
     background-color: rgb(253, 236, 224);
+}
+
+#questions {
+    font-size: 50px;
+    background-color: lightyellow;
+}
+
+.card {
+    display: block;
+    background-color: lightyellow;
+    margin: 60px auto;
+    padding: 20px;
+    width: 80vw;
+}
+
+
+
+label {
+    font-size: 30px;
+}
+
+input {
+    font-size: 20px;
+}
+
+.hide {
+    display: none;
 }

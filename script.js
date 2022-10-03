@@ -20,6 +20,7 @@ var currentQuestionIndex = 0;
 var correctQuestions = 0;
 var finalTime = 0;
 var timerInterval;
+var highscoreArray = [];
 // var quizQuestionList =   
 // [
 //      ["Question 1", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
@@ -209,14 +210,15 @@ function selectAnswer(element) {
         else {
             timeLeft = timeLeft-30000;
             console.log("Wrong!");
-
-            if (timeLeft <= 0)
-            {
-                stopTimer();
-                timer.innerHTML = "Time's Up!"
-            }
         }
-        writeQuestion(currentQuestionIndex);
+
+        if (timeLeft > 0){
+            writeQuestion(currentQuestionIndex);
+        }
+        else {
+            finalQuestion();
+            timer.innerHTML = "Time's up!";
+        }
     }
     else {
         finalQuestion();
@@ -224,19 +226,44 @@ function selectAnswer(element) {
 }
 
 function resetAnswers() {
-while(choices.firstChild)
-    {
-        choices.removeChild(choices.firstChild);
-    }
+    while(choices.firstChild)
+        {
+            choices.removeChild(choices.firstChild);
+        }
 }
 
 function finalQuestion() 
 {
-    console.log(currentQuestionIndex);
-    console.log(timeLeft);
-        resetAnswers();
-        // stop the timer
-        stopTimer();
-        // load the "end" screen
-        questions.innerHTML = "Submit your score!"
+    resetAnswers();
+    // stop the timer
+    stopTimer();
+    // load the "end" screen
+    questions.innerHTML = "Submit your score!";
+    highScoreInputForm();
+}
+
+// highscore input form
+function highScoreInputForm()
+{
+    var highscoreForm = document.createElement("form");
+    highscoreForm.setAttribute("data-type","form");
+    var highscoreInput = document.createElement("input");
+    highscoreInput.setAttribute("data-type","input");
+
+
+    highscoreForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        var highscoreText = highscoreInput.value.trim();
+        if (todoText === "") {
+            alert("Enter your name");
+        }
+        highscoreArray.push([highscoreText, correctQuestions, finalTime]);
+        highscoreInput.value = "";
+
+        storeHighscore();
+    })
+}
+
+function storeHighscore(){
+    localStorage.setItem("highscore", JSON.stringify(highscoreArray));
 }
