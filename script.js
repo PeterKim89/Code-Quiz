@@ -16,20 +16,115 @@ var instructions = document.querySelector("#instructions");
 var choices = document.querySelector("#choices");
 var timeLeft = 300000; // defaults quiz time to 5 minutes
 var toggleStatus = "visible";
-var quizQuestionList =   
+var currentQuestionIndex = 0;
+var correctQuestions = 0;
+// var quizQuestionList =   
+// [
+//      ["Question 1", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 2", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 3", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 4", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 5", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 6", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 7", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 8", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 9", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+//      ["Question 10", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],   
+// ];
+// var answerList = ["Choice 1","Answer2","Answer3","Answer4","Answer5","Answer6","Answer7","Answer8","Answer9","Answer10"];
+var questionList = 
 [
-     ["Question 1", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 2", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 3", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 4", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 5", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 6", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 7", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 8", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 9", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-     ["Question 10", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],   
-];
-var answerList = ["Answer1","Answer2","Answer3","Answer4","Answer5","Answer6","Answer7","Answer8","Answer9","Answer10"];
+    {
+        question: "Question 1",
+        answers: [
+            {choice: "answer", correct: true},
+            {choice: "Choice 2", correct: false},
+            {choice: "Choice 3", correct: false},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 2",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "Choice 2", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 3",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "Choice 2", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 4",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 3", correct: false},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 5",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "Choice 2", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 6",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "Choice 2", correct: false},
+            {choice: "Choice 3", correct: false},
+            {choice: "answer", correct: true},
+        ]
+    },
+    {
+        question: "Question 7",
+        answers: [
+            {choice: "answer", correct: true},
+            {choice: "Choice 2", correct: false},
+            {choice: "Choice 3", correct: false},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 8",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "Choice 2", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 9",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 3", correct: false},
+            {choice: "Choice 4", correct: false},
+        ]
+    },
+    {
+        question: "Question 10",
+        answers: [
+            {choice: "Choice 1", correct: false},
+            {choice: "answer", correct: true},
+            {choice: "Choice 3", correct: false},
+            {choice: "Choice 4", correct: false},
+        ]
+    }
+]
 startBtn.addEventListener("click", quizTimer); // change to eventually be a quiz starter function
 startBtn.addEventListener("click", toggleDisplay); // hides starting html elements when button is clicked
 startBtn.addEventListener("click", quizStart);
@@ -68,26 +163,110 @@ function toggleDisplay() {
     }
 }
 
+console.log(questionList[0])
+console.log(questionList[1])
+console.log(questionList[0].question)
+console.log(questionList[0].answers[1].choice)
+
 // loads questions and answers, one at a time.
 function quizStart() {
-    var currentQuestionIndex = 0;
-    writeQuestion();
+    
+    writeQuestion(currentQuestionIndex);
 }
 
-function writeQuestion(i){
-    questions.innerHTML = quizQuestionList[i][0];
-    for (j=1; j<=5; j++){
-        var answerBtn = document.createElement("button");
-        answerBtn.innerHTML = quizQuestionList[i][j];
-        answerBtn.addEventListener("click", selectAnswer())
-        choices.appendChild(answerBtn);
+function writeQuestion(i) {
+    var answersIndex=0;
+    if (choices.hasChildNodes){
+        resetAnswers();
+    }
+    questions.innerHTML = questionList[i].question;
+    questionList[i].answers.forEach(answer);
+    
+    function answer() {
+        var button = document.createElement("button");
+        button.innerHTML = questionList[i].answers[answersIndex].choice;
+        button.classList.add("btn");
+        if(questionList[i].answers[answersIndex].correct) {
+            button.dataset.correct = questionList[i].answers[answersIndex].correct;
+        }
+        button.addEventListener("click", selectAnswer);
+        choices.appendChild(button);
+        answersIndex++;
     }
 }
 
-function selectAnswer() {
+function selectAnswer(element) {
 
+    var selectedButton = element.target;
+    var correct = selectedButton.dataset.correct;
+
+    if (correct == "true")
+    {
+        correctQuestions++;
+        console.log("Correct!");
+        console.log(correctQuestions)
+    }
+    else {
+        timeLeft = timeLeft-30000;
+        console.log("Wrong!");
+    }
+    currentQuestionIndex++;
+    writeQuestion(currentQuestionIndex);
 }
 
-function resetWindow(){
+function resetAnswers() {
+while(choices.firstChild)
+    {
+        choices.removeChild(choices.firstChild);
+    }
+}
+
+// function writeQuestion(i){
+//     questions.innerHTML = quizQuestionList[i][0];
     
-}
+//     for (j=1; j<=4; j++){
+//         var answerBtn = document.createElement("button");
+//         // console.log(quizQuestionList[i][j]);
+//         var temp = j;
+//         console.log("This is J: " + temp);
+//         answerBtn.innerHTML = quizQuestionList[i][j];
+//         answerBtn.setAttribute = ("data-index", 4);
+//         console.log("This is attribute: " + answerBtn.getAttribute("data-index"));
+//         answerBtn.addEventListener("click", function()
+//         {
+//             console.log(answerBtn.innerHTML + "= innerHTML"); 
+//             console.log(answerBtn.getAttribute("data-index"));
+//             console.log(answerList[i] + "= answerList[i]");
+//             if (answerBtn.innerHTML == answerList[i])
+//             {
+//                 correctQuestions++;
+//                 console.log("Current score: "+correctQuestions)
+//             }
+//             else {
+//                 timeLeft = timeLeft - 30000;
+//             }
+//         })
+//         choices.appendChild(answerBtn);
+//     }
+// }
+
+
+// function selectAnswer(element) {
+//     var selectedAnswer = element.target;
+//     console.log(selectedAnswer);
+//     // checkAnswer(selectedAnswer);
+// }
+
+// function checkAnswer(answer){
+//     if(answer === answerList[currentQuestionIndex])
+//     {
+//         correctQuestions++;
+//     }
+//     else{
+//         timeLeft = timeLeft - 30000;
+//     }
+// }
+
+// function resetWindow(){
+
+// }
