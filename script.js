@@ -14,11 +14,12 @@ var timer = document.querySelector("#time");
 var questions = document.querySelector("#questions");
 var instructions = document.querySelector("#instructions");
 var choices = document.querySelector("#choices");
-var timeLeft = 300000; // defaults quiz time to 5 minutes
+var timeLeft = 30000; // defaults quiz time to 5 minutes
 var toggleStatus = "visible";
 var currentQuestionIndex = 0;
 var correctQuestions = 0;
 var finalTime = 0;
+var timerInterval;
 // var quizQuestionList =   
 // [
 //      ["Question 1", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
@@ -131,30 +132,19 @@ startBtn.addEventListener("click", toggleDisplay); // hides starting html elemen
 startBtn.addEventListener("click", quizStart);
 
 // creates a timer than ticks down from 5 minutes to 0, then displaying a Time's up message.
-function quizTimer(end) {
-    var endSwitch = end;
-    var timerInterval;
-    if (endSwitch === 0){
-        timerInterval = setInterval(function(event) {
-            timeLeft = timeLeft - 1000;
-            var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            timer.innerHTML = minutes + "m " + seconds + "s ";
-            if (timeLeft < 0) {
-                clearInterval(timerInterval);
-                timer.innerHTML = "Time's Up";
-            }
-            // include another condition for when quiz is finished
-        },1000 );
-    }
-    // if (endSwitch !== 0)
-    else
-    {
-        finalTime = timeLeft;
-        timeLeft=0;
-        clearInterval(timerInterval);
-        timer.innerHTML = "Quiz Over!"
-    }
+function quizTimer() {
+    // var endSwitch = end;
+    timerInterval = setInterval(function minutesSeconds(){
+        timeLeft = timeLeft - 1000;
+        var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        timer.innerHTML = minutes + "m " + seconds + "s ";
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 0;
 }
 
 // function to hide the start quiz button and the instructions and make visible again later
@@ -176,11 +166,9 @@ function toggleDisplay() {
     }
 }
 
-
-
 // loads questions and answers, one at a time.
 function quizStart() {
-    quizTimer(0);
+    quizTimer();
     writeQuestion(currentQuestionIndex);
 
 }
@@ -221,6 +209,12 @@ function selectAnswer(element) {
         else {
             timeLeft = timeLeft-30000;
             console.log("Wrong!");
+
+            if (timeLeft <= 0)
+            {
+                stopTimer();
+                timer.innerHTML = "Time's Up!"
+            }
         }
         writeQuestion(currentQuestionIndex);
     }
@@ -238,9 +232,11 @@ while(choices.firstChild)
 
 function finalQuestion() 
 {
+    console.log(currentQuestionIndex);
+    console.log(timeLeft);
         resetAnswers();
         // stop the timer
-        quizTimer(-1);
+        stopTimer();
         // load the "end" screen
         questions.innerHTML = "Submit your score!"
 }
