@@ -27,7 +27,7 @@ header h1 {
     float: right;
 }
 
-.start {
+#start {
     display: flex;
     font-size: 30px;
     background-color: darkblue;

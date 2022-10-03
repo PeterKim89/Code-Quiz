@@ -9,28 +9,31 @@
 // user should be able to input their initials and submit
 // when user checks highscore tab, should be able to see all local highscores
 
-var startBtn = document.querySelector(".start");
+var startBtn = document.querySelector("#start");
 var timer = document.querySelector(".time");
-var questions = document.querySelector(".questions");
+var questions = document.querySelector("#questions");
 var instructions = document.querySelector("#instructions");
+var choices = document.querySelector("#choices");
 var timeLeft = 300000; // defaults quiz time to 5 minutes
 var toggleStatus = "visible";
-var quizQuestionAnswerList = {
-    quizQuestionList: [this.Q1,this.Q2,this.Q3,this.Q4,this.Q5,this.Q6,this.Q7,this.Q8,this.Q9,this.Q10],
-    Q1: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q2: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q3: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q4: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q5: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q6: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q7: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q8: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q9: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
-    Q10: ["Actual question here", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],   
-}
-
+var quizQuestionList =   
+[
+     ["Question 1", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 2", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 3", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 4", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 5", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 6", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 7", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 8", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 9", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
+     ["Question 10", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],   
+];
+var answerList = ["Answer1","Answer2","Answer3","Answer4","Answer5","Answer6","Answer7","Answer8","Answer9","Answer10"];
 startBtn.addEventListener("click", quizTimer); // change to eventually be a quiz starter function
 startBtn.addEventListener("click", toggleDisplay); // hides starting html elements when button is clicked
+startBtn.addEventListener("click", quizStart);
+
 // creates a timer than ticks down from 5 minutes to 0, then displaying a Time's up message.
 function quizTimer() {
     var timerInterval = setInterval(function(event) {
@@ -46,7 +49,7 @@ function quizTimer() {
     },1000 );
 }
 
-// function to hide the start quiz button and the instructions
+// function to hide the start quiz button and the instructions and make visible again later
 function toggleDisplay() {
     var toggleArray = document.getElementsByClassName("toggle");
     if (toggleStatus === "visible") {
@@ -63,4 +66,28 @@ function toggleDisplay() {
             toggleArray[i].style.display = "block";
         }        
     }
+}
+
+// loads questions and answers, one at a time.
+function quizStart() {
+    var currentQuestionIndex = 0;
+    writeQuestion();
+}
+
+function writeQuestion(i){
+    questions.innerHTML = quizQuestionList[i][0];
+    for (j=1; j<=5; j++){
+        var answerBtn = document.createElement("button");
+        answerBtn.innerHTML = quizQuestionList[i][j];
+        answerBtn.addEventListener("click", selectAnswer())
+        choices.appendChild(answerBtn);
+    }
+}
+
+function selectAnswer() {
+
+}
+
+function resetWindow(){
+    
 }

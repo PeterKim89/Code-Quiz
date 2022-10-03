@@ -16,9 +16,9 @@
     </header>
     <main>
         <!-- start button -->
-        <button class="start">Start Quiz</button>
+        <button id="start" class="toggle">Start Quiz</button>
         <!-- timer -->
-        <h1 class="time" style="text-align:center;"></h1>
+        <h1 class="time" style="text-align:center; background-color: red;"></h1>
         <!-- starting instructions on how the quiz works -->
         <section id="instructions" class="toggle">
             <p>Once the start button is pressed, a timer of 5 minutes will begin counting down and you will need to solve 10 questions.</p>
@@ -26,11 +26,11 @@
             <p>If all questions are answered or the timer runs out, the quiz will end.</p>
             <p>Once the quiz ends, you can submit your score and view them in the highscore page. Good luck!</p>
         </section>
-        <section class="quiz">
+        <section id="quiz" style="text-align:center;">
             <!-- list of questions --> 
-            <h2 class="questions"></h2>
+            <h2 id="questions" style="font-size: 50px; background-color: white;"></h2>
             <!-- answer choices for the questions -->
-            <ul class="choices"></ul>
+            <section id="choices" style="font-size: 25px;"></section>
         </section>
     </main>
     <script src="script.js"></script>
