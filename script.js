@@ -10,7 +10,7 @@
 // when user checks highscore tab, should be able to see all local highscores
 
 var startBtn = document.querySelector("#start");
-var timer = document.querySelector(".time");
+var timer = document.querySelector("#time");
 var questions = document.querySelector("#questions");
 var instructions = document.querySelector("#instructions");
 var choices = document.querySelector("#choices");
@@ -18,6 +18,7 @@ var timeLeft = 300000; // defaults quiz time to 5 minutes
 var toggleStatus = "visible";
 var currentQuestionIndex = 0;
 var correctQuestions = 0;
+var finalTime = 0;
 // var quizQuestionList =   
 // [
 //      ["Question 1", "Choice 1", "Choice 2", "Choice 3", "Choice 4"],
@@ -125,23 +126,35 @@ var questionList =
         ]
     }
 ]
-startBtn.addEventListener("click", quizTimer); // change to eventually be a quiz starter function
+// startBtn.addEventListener("click", quizTimer(0));
 startBtn.addEventListener("click", toggleDisplay); // hides starting html elements when button is clicked
 startBtn.addEventListener("click", quizStart);
 
 // creates a timer than ticks down from 5 minutes to 0, then displaying a Time's up message.
-function quizTimer() {
-    var timerInterval = setInterval(function(event) {
-        timeLeft = timeLeft - 1000;
-        var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        document.getElementsByClassName("time")[0].innerHTML = minutes + "m " + seconds + "s ";
-        if (timeLeft < 0) {
-            clearInterval(timerInterval);
-            document.getElementsByClassName("time")[0].innerHTML = "Time's Up";
-        }
-        // include another condition for when quiz is finished
-    },1000 );
+function quizTimer(end) {
+    var endSwitch = end;
+    var timerInterval;
+    if (endSwitch === 0){
+        timerInterval = setInterval(function(event) {
+            timeLeft = timeLeft - 1000;
+            var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            timer.innerHTML = minutes + "m " + seconds + "s ";
+            if (timeLeft < 0) {
+                clearInterval(timerInterval);
+                timer.innerHTML = "Time's Up";
+            }
+            // include another condition for when quiz is finished
+        },1000 );
+    }
+    // if (endSwitch !== 0)
+    else
+    {
+        finalTime = timeLeft;
+        timeLeft=0;
+        clearInterval(timerInterval);
+        timer.innerHTML = "Quiz Over!"
+    }
 }
 
 // function to hide the start quiz button and the instructions and make visible again later
@@ -163,31 +176,30 @@ function toggleDisplay() {
     }
 }
 
-console.log(questionList[0])
-console.log(questionList[1])
-console.log(questionList[0].question)
-console.log(questionList[0].answers[1].choice)
+
 
 // loads questions and answers, one at a time.
 function quizStart() {
-    
+    quizTimer(0);
     writeQuestion(currentQuestionIndex);
+
 }
 
 function writeQuestion(i) {
+    console.log("This is current index: "+currentQuestionIndex);
     var answersIndex=0;
     if (choices.hasChildNodes){
         resetAnswers();
     }
     questions.innerHTML = questionList[i].question;
-    questionList[i].answers.forEach(answer);
+    questionList[i].answers.forEach(createAnswer);
     
-    function answer() {
+    function createAnswer() {
         var button = document.createElement("button");
         button.innerHTML = questionList[i].answers[answersIndex].choice;
         button.classList.add("btn");
         if(questionList[i].answers[answersIndex].correct) {
-            button.dataset.correct = questionList[i].answers[answersIndex].correct;
+            button.setAttribute("data-correct", questionList[i].answers[answersIndex].correct);
         }
         button.addEventListener("click", selectAnswer);
         choices.appendChild(button);
@@ -196,22 +208,25 @@ function writeQuestion(i) {
 }
 
 function selectAnswer(element) {
-
     var selectedButton = element.target;
-    var correct = selectedButton.dataset.correct;
-
-    if (correct == "true")
-    {
-        correctQuestions++;
-        console.log("Correct!");
-        console.log(correctQuestions)
+    var correct = selectedButton.getAttribute("data-correct");
+    currentQuestionIndex++;
+    if (currentQuestionIndex < 10){
+        if (correct == "true")
+        {
+            correctQuestions++;
+            console.log("Correct!");
+            console.log(correctQuestions)
+        }
+        else {
+            timeLeft = timeLeft-30000;
+            console.log("Wrong!");
+        }
+        writeQuestion(currentQuestionIndex);
     }
     else {
-        timeLeft = timeLeft-30000;
-        console.log("Wrong!");
+        finalQuestion();
     }
-    currentQuestionIndex++;
-    writeQuestion(currentQuestionIndex);
 }
 
 function resetAnswers() {
@@ -221,52 +236,11 @@ while(choices.firstChild)
     }
 }
 
-// function writeQuestion(i){
-//     questions.innerHTML = quizQuestionList[i][0];
-    
-//     for (j=1; j<=4; j++){
-//         var answerBtn = document.createElement("button");
-//         // console.log(quizQuestionList[i][j]);
-//         var temp = j;
-//         console.log("This is J: " + temp);
-//         answerBtn.innerHTML = quizQuestionList[i][j];
-//         answerBtn.setAttribute = ("data-index", 4);
-//         console.log("This is attribute: " + answerBtn.getAttribute("data-index"));
-//         answerBtn.addEventListener("click", function()
-//         {
-//             console.log(answerBtn.innerHTML + "= innerHTML"); 
-//             console.log(answerBtn.getAttribute("data-index"));
-//             console.log(answerList[i] + "= answerList[i]");
-//             if (answerBtn.innerHTML == answerList[i])
-//             {
-//                 correctQuestions++;
-//                 console.log("Current score: "+correctQuestions)
-//             }
-//             else {
-//                 timeLeft = timeLeft - 30000;
-//             }
-//         })
-//         choices.appendChild(answerBtn);
-//     }
-// }
-
-
-// function selectAnswer(element) {
-//     var selectedAnswer = element.target;
-//     console.log(selectedAnswer);
-//     // checkAnswer(selectedAnswer);
-// }
-
-// function checkAnswer(answer){
-//     if(answer === answerList[currentQuestionIndex])
-//     {
-//         correctQuestions++;
-//     }
-//     else{
-//         timeLeft = timeLeft - 30000;
-//     }
-// }
-
-// function resetWindow(){
-
-// }
+function finalQuestion() 
+{
+        resetAnswers();
+        // stop the timer
+        quizTimer(-1);
+        // load the "end" screen
+        questions.innerHTML = "Submit your score!"
+}
