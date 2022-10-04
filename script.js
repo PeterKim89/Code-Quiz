@@ -17,8 +17,8 @@ var choices = document.querySelector("#choices");
 var inputDiv = document.querySelector("#input-div");
 var inputForm = document.querySelector("#input-form");
 var inputName = document.querySelector("#input-name");
-var timeLeft = 30000; // defaults quiz time to 5 minutes
-var toggleStatus = "visible";
+var timeLeft = 3000; // defaults quiz time to 5 minutes
+var defaultStatus = "visible";
 var currentQuestionIndex = 0;
 var correctQuestions = 0;
 var finalTime = 0;
@@ -118,17 +118,25 @@ var questionList =
         ]
     }
 ]
-startBtn.addEventListener("click", toggleDisplay); // hides starting html elements when button is clicked
+startBtn.addEventListener("click", defaultDisplay); // hides starting html elements when button is clicked
 startBtn.addEventListener("click", quizStart);
 
 // creates a timer than ticks down from 5 minutes to 0, then displaying a Time's up message.
 function quizTimer() {
-    timerInterval = setInterval(function minutesSeconds(){
-        timeLeft = timeLeft - 1000;
-        var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        timer.innerHTML = minutes + "m " + seconds + "s ";
-    }, 1000);
+        timerInterval = setInterval(function minutesSeconds()
+        {
+            timeLeft = timeLeft - 1000;
+            var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            if (timeLeft >= 0){
+                timer.innerHTML = minutes + "m " + seconds + "s ";
+            }
+            else {
+                stopTimer();
+                timer.innerHTML = "Time's up!";
+                finalQuestion();
+            }
+        }, 1000);
 }
 
 function stopTimer() {
@@ -137,20 +145,22 @@ function stopTimer() {
 }
 
 // function to hide the start quiz button and the instructions and make visible again later
-function toggleDisplay() {
-    var toggleArray = document.getElementsByClassName("toggle");
-    if (toggleStatus === "visible") {
-        for(i=0; i<toggleArray.length; i++)
+function defaultDisplay() {
+    var defaultArray = document.getElementsByClassName("default");
+    if (defaultStatus === "visible") {
+        for(i=0; i<defaultArray.length; i++)
         {
-            toggleArray[i].style.display = "none";
+            // defaultArray[i].style.display = "none";
+            defaultArray[i].classList.add("hide");
+            console.log(defaultArray[i].classList)
         }
-        toggleStatus = "hidden";
+        defaultStatus = "hidden";
     }
     else {
-        toggleStatus = "visible"
-        for(i=0; i<toggleArray.length; i++)
+        defaultStatus = "visible"
+        for(i=0; i<defaultArray.length; i++)
         {
-            toggleArray[i].style.display = "block";
+            defaultArray[i].style.display = "block";
         }        
     }
 }
@@ -159,7 +169,6 @@ function toggleDisplay() {
 function quizStart() {
     quizTimer();
     writeQuestion(currentQuestionIndex);
-
 }
 
 function writeQuestion(i) {
