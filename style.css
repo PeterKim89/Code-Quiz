@@ -79,6 +79,17 @@ input {
     font-size: 20px;
 }
 
+.btn {
+    display: block;
+    text-align: center;
+    font-size: 25px;
+    width: 10%;
+    height: 6%;
+    margin-left:45%;
+
+    padding: 25px;
+}
+
 .hide {
     display: none;
 }

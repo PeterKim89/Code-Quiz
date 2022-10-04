@@ -19,6 +19,8 @@ var choices = document.querySelector("#choices");
 var inputDiv = document.querySelector("#input-div");
 var inputForm = document.querySelector("#input-form");
 var inputName = document.querySelector("#input-name");
+var highscoreList = document.querySelector("#highscoreList");
+var highscorePage = document.querySelector("#highscorePage");
 var timeLeft = 300000; // defaults quiz time to 5 minutes
 var defaultStatus = "visible";
 var currentQuestionIndex = 0;
@@ -32,93 +34,93 @@ var highscoreName;
 var questionList = 
 [
     {
-        question: "Question 1",
+        question: "How long is this array: [5,1,2,4]",
         answers: [
-            {choice: "answer", correct: true},
-            {choice: "Choice 2", correct: false},
-            {choice: "Choice 3", correct: false},
-            {choice: "Choice 4", correct: false},
+            {choice: "4", correct: true},
+            {choice: "3", correct: false},
+            {choice: "1", correct: false},
+            {choice: "2", correct: false},
         ]
     },
     {
-        question: "Question 2",
+        question: "What does Math.floor() do?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "Choice 2", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 4", correct: false},
+            {choice: "rounds up", correct: false},
+            {choice: "do nothing", correct: false},
+            {choice: "rounds down", correct: true},
+            {choice: "rounds to 1st decimal", correct: false},
         ]
     },
     {
-        question: "Question 3",
+        question: "Which of these is a boolean value?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "Choice 2", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 4", correct: false},
+            {choice: "5", correct: false},
+            {choice: "A", correct: false},
+            {choice: "true", correct: true},
+            {choice: "Farley 4", correct: false},
         ]
     },
     {
-        question: "Question 4",
+        question: "What is the symbol associated with id?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 3", correct: false},
-            {choice: "Choice 4", correct: false},
+            {choice: "$", correct: false},
+            {choice: "#", correct: true},
+            {choice: "!", correct: false},
+            {choice: ".", correct: false},
         ]
     },
     {
-        question: "Question 5",
+        question: "Fill in the blank ___.querySelector()",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "Choice 2", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 4", correct: false},
+            {choice: "app", correct: false},
+            {choice: "form", correct: false},
+            {choice: "document", correct: true},
+            {choice: "script", correct: false},
         ]
     },
     {
-        question: "Question 6",
+        question: "Which is not a valid programming language?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "Choice 2", correct: false},
-            {choice: "Choice 3", correct: false},
-            {choice: "answer", correct: true},
+            {choice: "Python", correct: false},
+            {choice: "JavaScript", correct: false},
+            {choice: "HTML", correct: false},
+            {choice: "Cheetos", correct: true},
         ]
     },
     {
-        question: "Question 7",
+        question: "What does CSS stand for?",
         answers: [
-            {choice: "answer", correct: true},
-            {choice: "Choice 2", correct: false},
-            {choice: "Choice 3", correct: false},
-            {choice: "Choice 4", correct: false},
+            {choice: "Cascading Style Sheet", correct: true},
+            {choice: "Custom Style Sheet", correct: false},
+            {choice: "Custom Style Script", correct: false},
+            {choice: "Cascading Style Script", correct: false},
         ]
     },
     {
-        question: "Question 8",
+        question: "What does HTML stands for?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "Choice 2", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 4", correct: false},
+            {choice: "Hypertext Machine Language", correct: false},
+            {choice: "Hypertext and links markup language", correct: false},
+            {choice: "Hypertext Markup Language", correct: true},
+            {choice: "Hightest Machine Language", correct: false},
         ]
     },
     {
-        question: "Question 9",
+        question: "Which of the following HTML Elements is used for making any text bold?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 3", correct: false},
-            {choice: "Choice 4", correct: false},
+            {choice: "<p>", correct: false},
+            {choice: "<b>", correct: true},
+            {choice: "<ul>", correct: false},
+            {choice: "<li>", correct: false},
         ]
     },
     {
-        question: "Question 10",
+        question: "How is document type initialized in HTML5?",
         answers: [
-            {choice: "Choice 1", correct: false},
-            {choice: "answer", correct: true},
-            {choice: "Choice 3", correct: false},
-            {choice: "Choice 4", correct: false},
+            {choice: "</DOCTYPE HTML>", correct: false},
+            {choice: "<!DOCTYPE HTML>", correct: true},
+            {choice: "</DOCTYPE>", correct: false},
+            {choice: "</DOCTYPE html>", correct: false},
         ]
     }
 ]
@@ -138,9 +140,6 @@ function checkStartButton()
 }
 checkStartButton();
 
-// startBtn.addEventListener("click", defaultDisplay); // hides starting html elements when button is clicked
-// startBtn.addEventListener("click", quizStart);
-
 // creates a timer than ticks down from 5 minutes to 0, then displaying a Time's up message.
 function quizTimer() {
     timer.style.display = "Block";
@@ -151,11 +150,11 @@ function quizTimer() {
             var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
             if (timeLeft >= 0){
-                timer.innerHTML = minutes + "m " + seconds + "s ";
+                timer.innerText = minutes + "m " + seconds + "s ";
             }
             else {
                 stopTimer();
-                timer.innerHTML = "Time's up!";
+                timer.innerText = "Time's up!";
                 finalQuestion();
             }
         }, 1000);
@@ -191,23 +190,24 @@ function defaultDisplay() {
 function quizStart() {
     // console.log(main.children)
     currentQuestionIndex = 0;
+    correctQuestions = 0;
     quiz.style.display = "Block";
     quizTimer();
     writeQuestion(currentQuestionIndex);
 }
 
 function writeQuestion(i) {
-    console.log("This is current index: "+currentQuestionIndex);
+    // console.log("This is current index: "+currentQuestionIndex);
     var answersIndex=0;
     if (choices.hasChildNodes){
         resetAnswers();
     }
-    questions.innerHTML = questionList[i].question;
+    questions.innerText = questionList[i].question;
     questionList[i].answers.forEach(createAnswer);
     
     function createAnswer() {
         var button = document.createElement("button");
-        button.innerHTML = questionList[i].answers[answersIndex].choice;
+        button.innerText = questionList[i].answers[answersIndex].choice;
         button.classList.add("btn");
         if(questionList[i].answers[answersIndex].correct) {
             button.setAttribute("data-correct", questionList[i].answers[answersIndex].correct);
@@ -239,7 +239,7 @@ function selectAnswer(element) {
         }
         else {
             finalQuestion();
-            timer.innerHTML = "Time's up!";
+            timer.innerText = "Time's up!";
         }
     }
     else {
@@ -264,13 +264,14 @@ function finalQuestion()
     // stop the timer
     stopTimer();
     // load the "end" screen
-    questions.innerHTML = "Submit your score!";
+    questions.innerText = "Submit your score!";
     highScoreInputForm();
 }
 
 // highscore input form
 function highScoreInputForm()
 {
+    console.log(main.children)
     inputDiv.style.display = "Block";
     inputForm.style.display = "Block";
     inputForm.addEventListener("submit", function(event) {
@@ -283,10 +284,9 @@ function highScoreInputForm()
         else {
             highscoreArray.push([highscoreName, correctQuestions, finalTime]);
         }
-        
-
         storeHighscore();
-        // TODO: upon submitting name to highscore, load default
+        clearMain();
+        defaultDisplay();
     }
     );
     inputName.value = "";
@@ -294,43 +294,83 @@ function highScoreInputForm()
 
 function storeHighscore(){
     localStorage.setItem("highscore", JSON.stringify(highscoreArray));
+    // console.log(sortHighscore());
 }
 
-//ToDo: sort leaderboard
-console.log(highscoreArray);
 function sortHighscore() {
+    var tempArrayElement;
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    highscoreArray = highscoreArray.filter(onlyUnique);
     // sorts highscores with highest correct questions taking priority, then time left
-    
+    for (i=0; i<highscoreArray.length - 1; i++)
+    {
+        for (j=0; j<highscoreArray.length - i - 1; j++)
+        {
+            if (highscoreArray[j][1] <= highscoreArray[j+1][1])
+            {
+                tempArrayElement = highscoreArray[j+1];
+                highscoreArray[j+1] = highscoreArray[j];
+                highscoreArray[j] = tempArrayElement;
+            }
+            else if (highscoreArray[j][2] <= highscoreArray[j+1][2])
+            {
+                tempArrayElement = highscoreArray[j+1];
+                highscoreArray[j+1] = highscoreArray[j];
+                highscoreArray[j] = tempArrayElement;
+            }                
+        }
+    }
 }
 
 function getHighscore() {
-    
+    sortHighscore();
+    for (i=0; i<highscoreArray.length; i++)
+        {
+            // create li elements per array element, then append to #highscoreList
+            var listElement = document.createElement("li");
+            listElement.innerText = highscoreArray[i][0] + " + Score: " + highscoreArray[i][1];
+            highscoreList.appendChild(listElement);
+        }
 }
 
-
-console.log(main.children.length);
-
+function clearHighscore() {
+    while (highscoreList.firstChild)
+    {
+        highscoreList.removeChild(highscoreList.firstChild)
+    }
+}
 
 highscoreBtn.addEventListener("click", toggleHighscore);
 // when highscore button is clicked, display highscore list. when clicked again, reset to the default page
 function toggleHighscore() {
-
     if (highscoreListVisible === false)
     {
-        for (i=0; i < main.children.length; i++)
-        {
-            // clears elements from main
-            main.children[i].style.display = "none";
-        }
-            // create the highscore list
-            highscoreListVisible = true;
-            defaultStatus = "hidden";
+        clearMain();
+        // create the highscore list
+        highscoreListVisible = true;
+        highscorePage.style.display = "Block";
+        highscoreList.style.display = "Block";
+        getHighscore();
+
     }
     else {
-        //Todo: clear highscore list
+        highscorePage.style.display = "none";
+        highscoreList.style.display = "none";
+        clearHighscore();
         // recreate default page
         defaultDisplay();
         highscoreListVisible = false;
     }
 }
 
+function clearMain () {
+    for (i=0; i < main.children.length; i++)
+        {
+            // if (main.children[i] !== )
+            // clears elements from main
+            main.children[i].style.display = "none";
+        }
+        defaultStatus = "hidden";
+}
