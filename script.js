@@ -297,12 +297,23 @@ function storeHighscore(){
     // console.log(sortHighscore());
 }
 
+function filterHighscore() {
+    var tempArray = [];
+    for (i=0; i<highscoreArray.length; i++)
+    {
+        if (tempArray.includes(highscoreArray[i]) === false)
+        {
+            tempArray.push(highscoreArray[i])
+        }
+    }
+    console.log(tempArray);
+    highscoreArray = tempArray;
+    console.log(highscoreArray);
+    return highscoreArray;
+}
+
 function sortHighscore() {
     var tempArrayElement;
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
-    highscoreArray = highscoreArray.filter(onlyUnique);
     // sorts highscores with highest correct questions taking priority, then time left
     for (i=0; i<highscoreArray.length - 1; i++)
     {
@@ -324,13 +335,13 @@ function sortHighscore() {
     }
 }
 
-function getHighscore() {
-    sortHighscore();
+function getHighscore() {    
+    sortHighscore(filterHighscore());
     for (i=0; i<highscoreArray.length; i++)
         {
             // create li elements per array element, then append to #highscoreList
             var listElement = document.createElement("li");
-            listElement.innerText = highscoreArray[i][0] + " + Score: " + highscoreArray[i][1];
+            listElement.innerText = highscoreArray[i][0] + " + Score: " + highscoreArray[i][1] + " correct questions, " + highscoreArray[i][2]/1000 +" seconds left";
             highscoreList.appendChild(listElement);
         }
 }
