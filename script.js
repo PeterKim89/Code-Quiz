@@ -9,6 +9,7 @@
 // user should be able to input their initials/name and submit
 // when user checks highscore tab, should be able to see all local highscores
 var main = document.querySelector("#main");
+var quiz = document.querySelector("#quiz");
 var highscoreBtn = document.querySelector("#highscoreBtn");
 var startBtn = document.querySelector("#start");
 var timer = document.querySelector("#time");
@@ -18,7 +19,7 @@ var choices = document.querySelector("#choices");
 var inputDiv = document.querySelector("#input-div");
 var inputForm = document.querySelector("#input-form");
 var inputName = document.querySelector("#input-name");
-var timeLeft = 3000; // defaults quiz time to 5 minutes
+var timeLeft = 300000; // defaults quiz time to 5 minutes
 var defaultStatus = "visible";
 var currentQuestionIndex = 0;
 var correctQuestions = 0;
@@ -26,6 +27,7 @@ var finalTime = 0;
 var timerInterval;
 var highscoreArray = [];
 var highscoreListVisible = false;
+var startBtnFunctionality = true;
 
 var questionList = 
 [
@@ -122,10 +124,27 @@ var questionList =
 ]
 
 startBtn.addEventListener("click", defaultDisplay); // hides starting html elements when button is clicked
-startBtn.addEventListener("click", quizStart);
+startBtn.addEventListener("click", quizStart); // starts quiz
+
+// Give start button functionality after hiding/reloading it
+function checkStartButton() 
+{
+    if (startBtnFunctionality === false)
+    {
+        startBtnFunctionality = true;
+        startBtn.addEventListener("click", defaultDisplay); // hides starting html elements when button is clicked
+        startBtn.addEventListener("click", quizStart); // starts quiz     
+    }
+}
+checkStartButton();
+
+// startBtn.addEventListener("click", defaultDisplay); // hides starting html elements when button is clicked
+// startBtn.addEventListener("click", quizStart);
 
 // creates a timer than ticks down from 5 minutes to 0, then displaying a Time's up message.
 function quizTimer() {
+    timer.style.display = "Block";
+    timeLeft = 300000;
         timerInterval = setInterval(function minutesSeconds()
         {
             timeLeft = timeLeft - 1000;
@@ -169,6 +188,9 @@ function defaultDisplay() {
 
 // loads questions and answers, one at a time.
 function quizStart() {
+    // console.log(main.children)
+    currentQuestionIndex = 0;
+    quiz.style.display = "Block";
     quizTimer();
     writeQuestion(currentQuestionIndex);
 }
@@ -295,5 +317,11 @@ function toggleHighscore() {
         // clear highscore list
         // recreate default page
         defaultDisplay();
+        highscoreListVisible = false;
+        for (i=0; i < main.children.length; i++)
+        {
+            // clears elements from main
+            // main.children[i].style.removeProperty("display");
+        }
     }
 }
