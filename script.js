@@ -28,7 +28,7 @@ var timerInterval;
 var highscoreArray = [];
 var highscoreListVisible = false;
 var startBtnFunctionality = true;
-
+var highscoreName;
 var questionList = 
 [
     {
@@ -178,7 +178,8 @@ function defaultDisplay() {
         defaultStatus = "hidden";
     }
     else {
-        defaultStatus = "visible"
+        defaultStatus = "visible";
+
         for(i=0; i<defaultArray.length; i++)
         {
             defaultArray[i].style.display = "block";
@@ -258,6 +259,7 @@ function resetAnswers() {
 
 function finalQuestion() 
 {
+    finalTime = timeLeft;
     resetAnswers();
     // stop the timer
     stopTimer();
@@ -269,35 +271,46 @@ function finalQuestion()
 // highscore input form
 function highScoreInputForm()
 {
-    inputDiv.classList.remove("hide");
-    inputForm.classList.remove("hide");
-    console.log("InputDiv classlist: " + inputDiv.classList);
-    console.log("inputForm classlist: " + inputForm.classList);
+    inputDiv.style.display = "Block";
+    inputForm.style.display = "Block";
     inputForm.addEventListener("submit", function(event) {
         event.preventDefault();
-        var highscoreName = inputName.value.trim();
-        if (highscoreName === "") {
+        highscoreName = inputName.value.trim();
+        if (highscoreName == "") 
+        {
             alert("Enter your name");
         }
-        highscoreArray.push([highscoreName, correctQuestions, finalTime]);
-        inputName.value = "";
+        else {
+            highscoreArray.push([highscoreName, correctQuestions, finalTime]);
+        }
+        
 
         storeHighscore();
-    })
+        // TODO: upon submitting name to highscore, load default
+    }
+    );
+    inputName.value = "";
 }
 
 function storeHighscore(){
     localStorage.setItem("highscore", JSON.stringify(highscoreArray));
 }
 
+//ToDo: sort leaderboard
+console.log(highscoreArray);
+function sortHighscore() {
+    // sorts highscores with highest correct questions taking priority, then time left
+    
+}
+
 function getHighscore() {
-    // sort leaderboard
+    
 }
 
 
 console.log(main.children.length);
 
-//TODO: add click event handler to the button
+
 highscoreBtn.addEventListener("click", toggleHighscore);
 // when highscore button is clicked, display highscore list. when clicked again, reset to the default page
 function toggleHighscore() {
@@ -314,14 +327,10 @@ function toggleHighscore() {
             defaultStatus = "hidden";
     }
     else {
-        // clear highscore list
+        //Todo: clear highscore list
         // recreate default page
         defaultDisplay();
         highscoreListVisible = false;
-        for (i=0; i < main.children.length; i++)
-        {
-            // clears elements from main
-            // main.children[i].style.removeProperty("display");
-        }
     }
 }
+
