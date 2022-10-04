@@ -8,7 +8,8 @@
 // when all Q's answered or timer runs out, game ends
 // user should be able to input their initials/name and submit
 // when user checks highscore tab, should be able to see all local highscores
-
+var main = document.querySelector("#main");
+var highscoreBtn = document.querySelector("#highscoreBtn");
 var startBtn = document.querySelector("#start");
 var timer = document.querySelector("#time");
 var questions = document.querySelector("#questions");
@@ -24,6 +25,7 @@ var correctQuestions = 0;
 var finalTime = 0;
 var timerInterval;
 var highscoreArray = [];
+var highscoreListVisible = false;
 
 var questionList = 
 [
@@ -118,6 +120,7 @@ var questionList =
         ]
     }
 ]
+
 startBtn.addEventListener("click", defaultDisplay); // hides starting html elements when button is clicked
 startBtn.addEventListener("click", quizStart);
 
@@ -150,9 +153,8 @@ function defaultDisplay() {
     if (defaultStatus === "visible") {
         for(i=0; i<defaultArray.length; i++)
         {
-            // defaultArray[i].style.display = "none";
+            defaultArray[i].style.display = "none";
             defaultArray[i].classList.add("hide");
-            console.log(defaultArray[i].classList)
         }
         defaultStatus = "hidden";
     }
@@ -264,4 +266,34 @@ function highScoreInputForm()
 
 function storeHighscore(){
     localStorage.setItem("highscore", JSON.stringify(highscoreArray));
+}
+
+function getHighscore() {
+    // sort leaderboard
+}
+
+
+console.log(main.children.length);
+
+//TODO: add click event handler to the button
+highscoreBtn.addEventListener("click", toggleHighscore);
+// when highscore button is clicked, display highscore list. when clicked again, reset to the default page
+function toggleHighscore() {
+
+    if (highscoreListVisible === false)
+    {
+        for (i=0; i < main.children.length; i++)
+        {
+            // clears elements from main
+            main.children[i].style.display = "none";
+        }
+            // create the highscore list
+            highscoreListVisible = true;
+            defaultStatus = "hidden";
+    }
+    else {
+        // clear highscore list
+        // recreate default page
+        defaultDisplay();
+    }
 }

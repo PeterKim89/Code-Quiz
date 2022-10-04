@@ -37,7 +37,7 @@ main * {
 }
 
 #start {
-    display: flex;
+    display: block;
     font-size: 30px;
     background-color: darkblue;
     color: white;
